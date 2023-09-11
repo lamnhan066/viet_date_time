@@ -70,17 +70,17 @@ class VietDateTime implements DateTime {
   /// Tiết khí
   String get solarTerms => getSolarTerms(judianDayNumber);
 
-  VietDateTime({
-    required this.isLeapMonth,
-    required this.year,
-    required this.month,
-    required this.day,
+  VietDateTime(
+    this.isLeapMonth,
+    this.year, [
+    this.month = 1,
+    this.day = 1,
     this.hour = 0,
     this.minute = 0,
     this.second = 0,
     this.millisecond = 0,
     this.microsecond = 0,
-  });
+  ]);
 
   factory VietDateTime.fromSolar(DateTime dateTime) {
     final lunarDate = convertSolar2Lunar(
@@ -91,17 +91,19 @@ class VietDateTime implements DateTime {
     );
 
     return VietDateTime(
-      isLeapMonth: lunarDate.isLeapMonth,
-      year: lunarDate.year,
-      month: lunarDate.month,
-      day: lunarDate.day,
-      hour: dateTime.hour,
-      minute: dateTime.minute,
-      second: dateTime.second,
-      millisecond: dateTime.millisecond,
-      microsecond: dateTime.microsecond,
+      lunarDate.isLeapMonth,
+      lunarDate.year,
+      lunarDate.month,
+      lunarDate.day,
+      dateTime.hour,
+      dateTime.minute,
+      dateTime.second,
+      dateTime.millisecond,
+      dateTime.microsecond,
     );
   }
+
+  factory VietDateTime.now() => VietDateTime.fromSolar(DateTime.now());
 
   DateTime toSolar() {
     final solar = convertLunar2Solar(
