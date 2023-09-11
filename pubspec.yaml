@@ -1,0 +1,17 @@
+name: viet_date_time
+description: "A new Flutter plugin project."
+version: 0.0.1
+homepage: https://github.com/vnniz/viet_date_time
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dev_dependencies:
+  test: ^1.21.3
+  lints: ^2.0.0
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter packages.
+flutter:
