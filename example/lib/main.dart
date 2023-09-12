@@ -13,7 +13,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final _vietDateTime = VietDateTime.fromSolar(DateTime.now());
+  final _vietDateTime = VietDateTime.fromDateTime(DateTime.now());
 
   @override
   void initState() {

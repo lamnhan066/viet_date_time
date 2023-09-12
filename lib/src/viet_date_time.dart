@@ -1,6 +1,9 @@
 import 'package:viet_date_time/src/base.dart';
 import 'package:viet_date_time/src/can_chi.dart';
 import 'package:viet_date_time/src/converter.dart';
+import 'package:viet_date_time/src/events/lunar_events.dart';
+import 'package:viet_date_time/src/events/solar_events.dart';
+import 'package:viet_date_time/viet_date_time.dart';
 
 class VietDateTime implements DateTime {
   // Weekday constants that are returned by [weekday] method:
@@ -28,6 +31,12 @@ class VietDateTime implements DateTime {
   static const int december = 12;
   static const int monthsPerYear = 12;
 
+  /// Danh sách các ngày lễ âm lịch
+  static VietEventList get lunarEvents => getLunarEvents;
+
+  /// Danh sách các ngày lễ dương lịch
+  static VietEventList get solarEvents => getSolarEvents;
+
   /// Nếu `true` thí tháng hiện tại là tháng nhuần
   final bool isLeapMonth;
   @override
@@ -47,8 +56,9 @@ class VietDateTime implements DateTime {
   @override
   final int microsecond;
 
-  int get judianDayNumber {
-    final solar = toSolar();
+  /// Giá trị ngày Julian
+  int get julianDayNumber {
+    final solar = toDateTime();
     return jdFromDate(solar.day, solar.month, solar.year);
   }
 
@@ -59,16 +69,16 @@ class VietDateTime implements DateTime {
   String get canChiOfMonth => getCanChiMonth(month, year);
 
   /// Can của giờ hiện tại
-  String get canOfHour => getCanOfHour(judianDayNumber);
+  String get canOfHour => getCanOfHour(julianDayNumber);
 
   /// Can chi của ngày hiện tại
-  String get canChiOfDay => getCanChiOfDay(judianDayNumber);
+  String get canChiOfDay => getCanChiOfDay(julianDayNumber);
 
   /// Giờ hoàng đạo
-  String get luckyHour => getLuckyHour(judianDayNumber);
+  String get luckyHour => getLuckyHour(julianDayNumber);
 
   /// Tiết khí
-  String get solarTerms => getSolarTerms(judianDayNumber);
+  String get solarTerms => getSolarTerms(julianDayNumber);
 
   VietDateTime(
     this.isLeapMonth,
@@ -82,7 +92,7 @@ class VietDateTime implements DateTime {
     this.microsecond = 0,
   ]);
 
-  factory VietDateTime.fromSolar(DateTime dateTime) {
+  factory VietDateTime.fromDateTime(DateTime dateTime) {
     final lunarDate = convertSolar2Lunar(
       dateTime.day,
       dateTime.month,
@@ -103,9 +113,9 @@ class VietDateTime implements DateTime {
     );
   }
 
-  factory VietDateTime.now() => VietDateTime.fromSolar(DateTime.now());
+  factory VietDateTime.now() => VietDateTime.fromDateTime(DateTime.now());
 
-  DateTime toSolar() {
+  DateTime toDateTime() {
     final solar = convertLunar2Solar(
       day,
       month,
@@ -128,69 +138,69 @@ class VietDateTime implements DateTime {
 
   @override
   VietDateTime add(Duration duration) {
-    return VietDateTime.fromSolar(toSolar().add(duration));
+    return VietDateTime.fromDateTime(toDateTime().add(duration));
   }
 
   @override
   int compareTo(DateTime other) {
-    return toSolar().compareTo(other);
+    return toDateTime().compareTo(other);
   }
 
   @override
   Duration difference(DateTime other) {
-    return toSolar().difference(other);
+    return toDateTime().difference(other);
   }
 
   @override
   bool isAfter(DateTime other) {
-    return toSolar().isAfter(other);
+    return toDateTime().isAfter(other);
   }
 
   @override
   bool isAtSameMomentAs(DateTime other) {
-    return toSolar().isAtSameMomentAs(other);
+    return toDateTime().isAtSameMomentAs(other);
   }
 
   @override
   bool isBefore(DateTime other) {
-    return toSolar().isBefore(other);
+    return toDateTime().isBefore(other);
   }
 
   @override
-  bool get isUtc => toSolar().isUtc;
+  bool get isUtc => toDateTime().isUtc;
 
   @override
-  int get microsecondsSinceEpoch => toSolar().microsecondsSinceEpoch;
+  int get microsecondsSinceEpoch => toDateTime().microsecondsSinceEpoch;
 
   @override
-  int get millisecondsSinceEpoch => toSolar().millisecondsSinceEpoch;
+  int get millisecondsSinceEpoch => toDateTime().millisecondsSinceEpoch;
 
   @override
   VietDateTime subtract(Duration duration) {
-    return VietDateTime.fromSolar(toSolar().subtract(duration));
+    return VietDateTime.fromDateTime(toDateTime().subtract(duration));
   }
 
   @override
-  String get timeZoneName => toSolar().timeZoneName;
+  String get timeZoneName => toDateTime().timeZoneName;
 
   @override
-  Duration get timeZoneOffset => toSolar().timeZoneOffset;
+  Duration get timeZoneOffset => toDateTime().timeZoneOffset;
 
   @override
   String toIso8601String() {
-    return toSolar().toIso8601String();
+    return toDateTime().toIso8601String();
   }
 
   @override
   DateTime toLocal() {
-    return toSolar().toLocal();
+    return toDateTime().toLocal();
   }
 
   @override
   DateTime toUtc() {
-    return toSolar().toUtc();
+    return toDateTime().toUtc();
   }
 
   @override
-  int get weekday => toSolar().weekday;
+  int get weekday => toDateTime().weekday;
 }
