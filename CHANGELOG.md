@@ -1,3 +1,7 @@
+# 0.0.1-rc.4
+
+* Export `.toVietDateTime` extension.
+
 ## 0.0.1-rc.3
 
 [BREAKING CHANGE]
