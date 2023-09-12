@@ -1,7 +1,7 @@
 import 'package:viet_date_time/src/models/event.dart';
 import 'package:viet_date_time/src/models/event_list.dart';
 
-final getSolarEvents = VietEventList(events: {
+final getSolarEvents = VietEventList<VietEvent>(events: {
   DateTime(0, 1, 1): [
     VietEvent(date: DateTime(0, 1, 1), title: 'Tết Dương Lịch'),
   ],
@@ -40,7 +40,9 @@ final getSolarEvents = VietEventList(events: {
   ],
   DateTime(0, 5, 19): [
     VietEvent(
-        date: DateTime(0, 5, 19), title: 'Ngày sinh chủ tịch Hồ Chí Minh'),
+      date: DateTime(0, 5, 19),
+      title: 'Ngày sinh chủ tịch Hồ Chí Minh',
+    ),
   ],
   DateTime(0, 6, 1): [
     VietEvent(date: DateTime(0, 6, 1), title: 'Ngày Quốc tế thiếu nhi'),
@@ -62,7 +64,9 @@ final getSolarEvents = VietEventList(events: {
   ],
   DateTime(0, 7, 28): [
     VietEvent(
-        date: DateTime(0, 7, 28), title: 'Ngày thành lập Công đoàn Việt Nam'),
+      date: DateTime(0, 7, 28),
+      title: 'Ngày thành lập Công đoàn Việt Nam',
+    ),
   ],
   DateTime(0, 8, 19): [
     VietEvent(date: DateTime(0, 8, 19), title: 'Ngày tổng khởi nghĩa'),
@@ -108,7 +112,9 @@ final getSolarEvents = VietEventList(events: {
   ],
   DateTime(0, 12, 1): [
     VietEvent(
-        date: DateTime(0, 12, 1), title: 'Ngày Thế giới phòng chống AIDS'),
+      date: DateTime(0, 12, 1),
+      title: 'Ngày Thế giới phòng chống AIDS',
+    ),
   ],
   DateTime(0, 12, 19): [
     VietEvent(date: DateTime(0, 12, 19), title: 'Ngày Toàn quốc kháng chiến'),

@@ -1,4 +1,8 @@
-# 0.0.1-rc.4
+## 0.0.1-rc.5
+
+* Add the return type to `lunarEvents` and `solarEvents`.
+
+## 0.0.1-rc.4
 
 * Export `.toVietDateTime` extension.
 

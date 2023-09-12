@@ -32,10 +32,10 @@ class VietDateTime implements DateTime {
   static const int monthsPerYear = 12;
 
   /// Danh sách các ngày lễ âm lịch
-  static VietEventList get lunarEvents => getLunarEvents;
+  static VietEventList<VietEvent> get lunarEvents => getLunarEvents;
 
   /// Danh sách các ngày lễ dương lịch
-  static VietEventList get solarEvents => getSolarEvents;
+  static VietEventList<VietEvent> get solarEvents => getSolarEvents;
 
   /// Nếu `true` thí tháng hiện tại là tháng nhuần
   final bool isLeapMonth;

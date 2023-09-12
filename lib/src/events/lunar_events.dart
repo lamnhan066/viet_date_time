@@ -1,6 +1,6 @@
 import 'package:viet_date_time/viet_date_time.dart';
 
-final getLunarEvents = VietEventList(events: {
+final getLunarEvents = VietEventList<VietEvent>(events: {
   VietDateTime(false, 0, 1, 1): [
     VietEvent(date: VietDateTime(false, 0, 1, 1), title: 'Tết Nguyên Đán'),
   ],
@@ -45,7 +45,9 @@ final getLunarEvents = VietEventList(events: {
   ],
   VietDateTime(false, 0, 12, 23): [
     VietEvent(
-        date: VietDateTime(false, 0, 12, 23), title: 'Tiễn Táo Quân Về Trời'),
+      date: VietDateTime(false, 0, 12, 23),
+      title: 'Tiễn Táo Quân Về Trời',
+    ),
   ],
   VietDateTime(false, 0, 12, 29): [
     VietEvent(date: VietDateTime(false, 0, 12, 29), title: 'Lễ Tất Niên'),
