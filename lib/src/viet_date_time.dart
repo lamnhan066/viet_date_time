@@ -31,11 +31,20 @@ class VietDateTime implements DateTime {
   static const int december = 12;
   static const int monthsPerYear = 12;
 
-  /// Danh sách các ngày lễ âm lịch
+  /// Danh sách các ngày lễ âm lịch, thời gian ở đây sẽ sử dụng [VietDateTime].
   static VietEventList<VietEvent> get lunarEvents => getLunarEvents;
 
-  /// Danh sách các ngày lễ dương lịch
+  /// Danh sách các ngày lễ dương lịch, thời gian ở đây sẽ sử dụng [DateTime].
   static VietEventList<VietEvent> get solarEvents => getSolarEvents;
+
+  static VietDateTime parse(String formattedString) {
+    return VietDateTime.fromDateTime(DateTime.parse(formattedString));
+  }
+
+  static VietDateTime? tryParse(String formattedString) {
+    final parsed = DateTime.tryParse(formattedString);
+    return parsed == null ? null : VietDateTime.fromDateTime(parsed);
+  }
 
   /// Nếu `true` thí tháng hiện tại là tháng nhuần
   final bool isLeapMonth;
@@ -56,29 +65,32 @@ class VietDateTime implements DateTime {
   @override
   final int microsecond;
 
-  /// Giá trị ngày Julian
+  /// Giá trị ngày Julian.
   int get julianDayNumber {
     final solar = toDateTime();
     return jdFromDate(solar.day, solar.month, solar.year);
   }
 
-  /// Can chi của năm hiện tại
+  /// Can chi của năm hiện tại.
   String get canChiOfYear => getCanChiOfYear(year);
 
-  /// can chi của tháng hiện tại
+  /// Can chi của tháng hiện tại.
   String get canChiOfMonth => getCanChiMonth(month, year);
 
-  /// Can của giờ hiện tại
+  /// Can của giờ hiện tại.
   String get canOfHour => getCanOfHour(julianDayNumber);
 
-  /// Can chi của ngày hiện tại
+  /// Can chi của ngày hiện tại.
   String get canChiOfDay => getCanChiOfDay(julianDayNumber);
 
-  /// Giờ hoàng đạo
+  /// Giờ hoàng đạo.
   String get luckyHour => getLuckyHour(julianDayNumber);
 
-  /// Tiết khí
+  /// Tiết khí.
   String get solarTerms => getSolarTerms(julianDayNumber);
+
+  /// Lưu [timeZoneOffset] khi chuyển từ [DateTime], đồng
+  Duration? _timeZoneOffset;
 
   VietDateTime(
     this.isLeapMonth,
@@ -110,12 +122,16 @@ class VietDateTime implements DateTime {
       dateTime.second,
       dateTime.millisecond,
       dateTime.microsecond,
-    );
+    ).._timeZoneOffset = dateTime.timeZoneOffset;
   }
 
   factory VietDateTime.now() => VietDateTime.fromDateTime(DateTime.now());
 
-  DateTime toDateTime() {
+  /// Chuyển đổi từ [VietDateTime] sang [DateTime] với tham số [timeZoneOffset]
+  /// là độ chênh lệch giữa Local và UTC, mặc định sẽ sử dụng giá trị từ
+  /// [DateTime.now].
+  DateTime toDateTime([Duration? timeZoneOffset]) {
+    timeZoneOffset ??= this.timeZoneOffset;
     final solar = convertLunar2Solar(
       day,
       month,
@@ -142,28 +158,58 @@ class VietDateTime implements DateTime {
   }
 
   @override
+  VietDateTime subtract(Duration duration) {
+    return VietDateTime.fromDateTime(toDateTime().subtract(duration));
+  }
+
+  @override
   int compareTo(DateTime other) {
-    return toDateTime().compareTo(other);
+    DateTime dateTime = other;
+    if (other is VietDateTime) {
+      dateTime = other.toDateTime();
+    }
+
+    return toDateTime().compareTo(dateTime);
   }
 
   @override
   Duration difference(DateTime other) {
-    return toDateTime().difference(other);
+    DateTime dateTime = other;
+    if (other is VietDateTime) {
+      dateTime = other.toDateTime();
+    }
+
+    return toDateTime().difference(dateTime);
   }
 
   @override
   bool isAfter(DateTime other) {
-    return toDateTime().isAfter(other);
+    DateTime dateTime = other;
+    if (other is VietDateTime) {
+      dateTime = other.toDateTime();
+    }
+
+    return toDateTime().isAfter(dateTime);
   }
 
   @override
   bool isAtSameMomentAs(DateTime other) {
-    return toDateTime().isAtSameMomentAs(other);
+    DateTime dateTime = other;
+    if (other is VietDateTime) {
+      dateTime = other.toDateTime();
+    }
+
+    return toDateTime().isAtSameMomentAs(dateTime);
   }
 
   @override
   bool isBefore(DateTime other) {
-    return toDateTime().isBefore(other);
+    DateTime dateTime = other;
+    if (other is VietDateTime) {
+      dateTime = other.toDateTime();
+    }
+
+    return toDateTime().isBefore(dateTime);
   }
 
   @override
@@ -176,15 +222,11 @@ class VietDateTime implements DateTime {
   int get millisecondsSinceEpoch => toDateTime().millisecondsSinceEpoch;
 
   @override
-  VietDateTime subtract(Duration duration) {
-    return VietDateTime.fromDateTime(toDateTime().subtract(duration));
-  }
-
-  @override
   String get timeZoneName => toDateTime().timeZoneName;
 
   @override
-  Duration get timeZoneOffset => toDateTime().timeZoneOffset;
+  Duration get timeZoneOffset =>
+      _timeZoneOffset ?? DateTime.now().timeZoneOffset;
 
   @override
   String toIso8601String() {
@@ -203,4 +245,35 @@ class VietDateTime implements DateTime {
 
   @override
   int get weekday => toDateTime().weekday;
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is VietDateTime &&
+        other.isLeapMonth == isLeapMonth &&
+        other.year == year &&
+        other.month == month &&
+        other.day == day &&
+        other.hour == hour &&
+        other.minute == minute &&
+        other.second == second &&
+        other.millisecond == millisecond &&
+        other.microsecond == microsecond &&
+        other._timeZoneOffset == _timeZoneOffset;
+  }
+
+  @override
+  int get hashCode {
+    return isLeapMonth.hashCode ^
+        year.hashCode ^
+        month.hashCode ^
+        day.hashCode ^
+        hour.hashCode ^
+        minute.hashCode ^
+        second.hashCode ^
+        millisecond.hashCode ^
+        microsecond.hashCode ^
+        _timeZoneOffset.hashCode;
+  }
 }

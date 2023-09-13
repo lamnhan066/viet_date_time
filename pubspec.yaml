@@ -1,6 +1,6 @@
 name: viet_date_time
 description: "Hỗ trợ trong việc chuyển đổi và tính toán ngày tháng, thời gian và can chi theo lịch Việt Nam."
-version: 0.0.1-rc.5
+version: 0.0.1-rc.6
 homepage: https://github.com/vnniz/viet_date_time
 
 environment:

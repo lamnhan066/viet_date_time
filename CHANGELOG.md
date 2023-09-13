@@ -1,3 +1,9 @@
+## 0.0.1-rc.6
+
+* Add serializers to `VietEvent` and `VietEventList`.
+* Fix issue related to `timeZoneOffset`.
+* `==` operator now works correctly.
+
 ## 0.0.1-rc.5
 
 * Add the return type to `lunarEvents` and `solarEvents`.
