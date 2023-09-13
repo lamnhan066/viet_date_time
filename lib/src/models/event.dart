@@ -1,7 +1,10 @@
 import 'dart:convert';
 
-class VietEvent {
-  final DateTime date;
+import 'package:equatable/equatable.dart';
+import 'package:viet_date_time/viet_date_time.dart';
+
+class VietEvent<D extends DateTime> extends Equatable {
+  final D date;
   final String? title;
   final String? description;
   final String? location;
@@ -15,7 +18,7 @@ class VietEvent {
   });
 
   VietEvent copyWith({
-    DateTime? date,
+    D? date,
     String? title,
     String? description,
     String? location,
@@ -32,7 +35,7 @@ class VietEvent {
 
   Map<String, dynamic> toMap() {
     return {
-      'date': date.millisecondsSinceEpoch,
+      'date': date.toIso8601String(),
       'title': title,
       'description': description,
       'location': location,
@@ -41,8 +44,9 @@ class VietEvent {
   }
 
   factory VietEvent.fromMap(Map<String, dynamic> map) {
+    final date = DateTime.parse(map['date']);
     return VietEvent(
-      date: DateTime.fromMillisecondsSinceEpoch(map['date']),
+      date: (D == DateTime ? date : date.toVietDateTime) as D,
       title: map['title'],
       description: map['description'],
       location: map['location'],
@@ -56,14 +60,18 @@ class VietEvent {
       VietEvent.fromMap(json.decode(source));
 
   @override
-  bool operator ==(dynamic other) {
-    return date == other.date &&
-        title == other.title &&
-        description == other.description &&
-        location == other.location &&
-        id == other.id;
+  String toString() {
+    return 'VietEvent(date: $date, title: $title, description: $description, location: $location, id: $id)';
   }
 
   @override
-  int get hashCode => Object.hash(date, description, location, title, id);
+  List<Object> get props {
+    return [
+      date,
+      title ?? '',
+      description ?? '',
+      location ?? '',
+      id ?? '',
+    ];
+  }
 }

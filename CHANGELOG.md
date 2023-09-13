@@ -1,3 +1,8 @@
+## 0.0.1-rc.7
+
+* Improve `VietEvent` and `VietEvenList` serializer.
+* Add a few base tests.
+
 ## 0.0.1-rc.6
 
 * Add serializers to `VietEvent` and `VietEventList`.

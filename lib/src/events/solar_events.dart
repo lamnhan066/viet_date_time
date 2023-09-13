@@ -1,7 +1,7 @@
 import 'package:viet_date_time/src/models/event.dart';
 import 'package:viet_date_time/src/models/event_list.dart';
 
-final getSolarEvents = VietEventList<VietEvent>(events: {
+final getSolarEvents = VietEventList<DateTime>(events: {
   DateTime(0, 1, 1): [
     VietEvent(date: DateTime(0, 1, 1), title: 'Tết Dương Lịch'),
   ],

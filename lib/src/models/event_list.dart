@@ -1,13 +1,16 @@
 import 'dart:convert';
 
-class VietEventList<T> {
-  Map<DateTime, List<T>> events;
+import 'package:equatable/equatable.dart';
+import 'package:viet_date_time/viet_date_time.dart';
+
+class VietEventList<D extends DateTime> extends Equatable {
+  final Map<D, List<VietEvent<D>>> events;
 
   VietEventList({
     required this.events,
   });
 
-  void add(DateTime date, T event) {
+  void add(D date, VietEvent<D> event) {
     final eventsOfDate = events[date];
     if (eventsOfDate == null) {
       events[date] = [event];
@@ -16,7 +19,7 @@ class VietEventList<T> {
     }
   }
 
-  void addAll(DateTime date, List<T> events) {
+  void addAll(D date, List<VietEvent<D>> events) {
     final eventsOfDate = this.events[date];
     if (eventsOfDate == null) {
       this.events[date] = events;
@@ -25,12 +28,12 @@ class VietEventList<T> {
     }
   }
 
-  bool remove(DateTime date, T event) {
+  bool remove(D date, VietEvent<D> event) {
     final eventsOfDate = events[date];
     return eventsOfDate != null ? eventsOfDate.remove(event) : false;
   }
 
-  List<T> removeAll(DateTime date) {
+  List<VietEvent<D>> removeAll(D date) {
     return events.remove(date) ?? [];
   }
 
@@ -38,24 +41,44 @@ class VietEventList<T> {
     events.clear();
   }
 
-  List<T> getEvents(DateTime date) {
+  List<VietEvent<D>> getEvents(D date) {
     return events[date] ?? [];
   }
 
+  /// Map<D in microsecondsSinceEpoch, List of VietEvent>
   Map<String, dynamic> toMap() {
-    return {
-      'events': events,
-    };
+    final Map<String, List<String>> map = {};
+    events.forEach((key, value) {
+      map.addAll(
+          {key.toIso8601String(): value.map((e) => e.toJson()).toList()});
+    });
+
+    return {'events': map};
   }
 
   factory VietEventList.fromMap(Map<String, dynamic> map) {
-    return VietEventList<T>(
-      events: Map<DateTime, List<T>>.from(map['events']),
-    );
+    final events = VietEventList<D>(events: {});
+    final mapEvents = map['events'] as Map<String, dynamic>;
+    mapEvents.forEach((key, value) {
+      var dateTime = DateTime.parse(key);
+      events.addAll(
+        (D == DateTime ? dateTime : dateTime.toVietDateTime) as D,
+        (value as List)
+            .map((e) => VietEvent<D>.fromJson(e.toString()))
+            .toList(),
+      );
+    });
+    return events;
   }
 
   String toJson() => json.encode(toMap());
 
   factory VietEventList.fromJson(String source) =>
       VietEventList.fromMap(json.decode(source));
+
+  @override
+  String toString() => 'VietEventList(events: $events)';
+
+  @override
+  List<Object> get props => [events];
 }

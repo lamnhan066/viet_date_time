@@ -32,10 +32,10 @@ class VietDateTime implements DateTime {
   static const int monthsPerYear = 12;
 
   /// Danh sách các ngày lễ âm lịch, thời gian ở đây sẽ sử dụng [VietDateTime].
-  static VietEventList<VietEvent> get lunarEvents => getLunarEvents;
+  static VietEventList get lunarEvents => getLunarEvents;
 
   /// Danh sách các ngày lễ dương lịch, thời gian ở đây sẽ sử dụng [DateTime].
-  static VietEventList<VietEvent> get solarEvents => getSolarEvents;
+  static VietEventList get solarEvents => getSolarEvents;
 
   static VietDateTime parse(String formattedString) {
     return VietDateTime.fromDateTime(DateTime.parse(formattedString));
@@ -258,8 +258,6 @@ class VietDateTime implements DateTime {
         other.hour == hour &&
         other.minute == minute &&
         other.second == second &&
-        other.millisecond == millisecond &&
-        other.microsecond == microsecond &&
         other._timeZoneOffset == _timeZoneOffset;
   }
 
@@ -272,8 +270,11 @@ class VietDateTime implements DateTime {
         hour.hashCode ^
         minute.hashCode ^
         second.hashCode ^
-        millisecond.hashCode ^
-        microsecond.hashCode ^
         _timeZoneOffset.hashCode;
+  }
+
+  @override
+  String toString() {
+    return toDateTime().toString();
   }
 }
