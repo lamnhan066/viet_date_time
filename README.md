@@ -4,14 +4,27 @@ Hỗ trợ trong việc chuyển đổi và tính toán ngày tháng, thời gia
 
 ## Sử Dụng
 
+Khai báo theo ngày tháng cu thê:
+
 ``` dart
-final vietDateTime = VietDateTime.fromSolar(DateTime.now());
+// Ngày 1 tháng 10 năm 2023 và tháng 10 không phải tháng nhuần
+final vietDateTime = VietDateTime(false, 2023, 10, 1);
 ```
 
-Hoặc sử dụng extension
+Chuyển đổi từ `DateTime`:
 
 ``` dart
-final vietDateTime = dateTime.toLunar;
+final vietDateTime = VietDateTime.now();
+// Or
+final vietDateTime = VietDateTime.fromDateTime(DateTime.now());
+// Or
+final vietDateTime = DateTime.now().toVietDateTime;
+```
+
+Chuyển từ `VietDateTime` sang `DateTime`:
+
+``` dart
+final dateTime = vietDateTime.toDateTime();
 ```
 
 Kiểm tra tháng hiện tại có phải tháng nhuần hay không
@@ -31,8 +44,10 @@ Thông tin các ngày lễ trong năm:
 
 ``` dart
 // Các ngày lễ theo âm lịch
+// Kết quả sẽ là danh sách với thời gian tính theo `VietDateTime`
 VietDateTime.lunarEvents;
 
 // Các ngày lễ theo dương lịch
-VietDateTime.solarEvents;
+// Kết quả sẽ là danh sách với thời gian tính theo `DateTime`
+VietDateTime.solarEvents; 
 ```

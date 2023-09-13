@@ -1,3 +1,7 @@
+## 0.0.1-rc.8
+
+* Improve README
+
 ## 0.0.1-rc.7
 
 * Improve `VietEvent` and `VietEvenList` serializer.
